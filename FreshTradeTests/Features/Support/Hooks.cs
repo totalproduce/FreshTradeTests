@@ -9,16 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Configuration;
 
 namespace FreshTradeTests.Features.Support
 {
     [Binding]
     class Hooks
     {
+        private WindowsDriver<WindowsElement> windowsDriver;
         private readonly ObjectContainer objectContainer;
-        private IWebDriver driver;
+
         static DesiredCapabilities desiredCapabilities;
         private const string FreshTradeApp = @"C:\ProgramFilesx86\Corel\WordPerfect Office 2000\programs\pdxwin32.exe";
+
         private ParadoxScreen paradoxScreen;
 
         public Hooks(ObjectContainer objectContainer)
@@ -29,31 +32,29 @@ namespace FreshTradeTests.Features.Support
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
-            Dictionary<string, object> caps = new Dictionary<string, object>();
-            caps.Add("platformName","Windows");
-            caps.Add("deviceName", "WindowsPC");
-            caps.Add("app", FreshTradeApp);
-
-            desiredCapabilities = new DesiredCapabilities(caps);
+            desiredCapabilities = new DesiredCapabilities();
+            desiredCapabilities.SetCapability("platformName", "Windows");
+            desiredCapabilities.SetCapability("deviceName", "WindowsPC");
+            desiredCapabilities.SetCapability("app", FreshTradeApp);
         }
 
         [BeforeScenario]
         public void BeforeScenario()
         {
-            driver = new WindowsDriver<WindowsElement>(desiredCapabilities);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            objectContainer.RegisterInstanceAs(driver);
-            // Load the menu forn after opening Paradox
-            paradoxScreen = new ParadoxScreen(this.driver);
+            windowsDriver = new WindowsDriver<WindowsElement>(desiredCapabilities);
+            windowsDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            objectContainer.RegisterInstanceAs(windowsDriver);
+            // Load Menu Form after opening Paradox
+            paradoxScreen = new ParadoxScreen(this.windowsDriver);
             paradoxScreen.OpenMenuForm();
         }
 
         [AfterScenario]
         public void AfterScenario()
         {
-            if(driver != null)
+            if(windowsDriver != null)
             {
-                driver.Dispose();
+                windowsDriver.Dispose();
             }
         }
 

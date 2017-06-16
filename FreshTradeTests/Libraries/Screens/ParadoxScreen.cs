@@ -1,43 +1,31 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Appium.PageObjects;
-using OpenQA.Selenium.Support.PageObjects;
+using System;
 
 namespace FreshTradeTests.Libraries.Screens
 {
     class ParadoxScreen
     {
-        private readonly IWebDriver driver;
+        private WindowsDriver<WindowsElement> windowsDriver;
 
-        public ParadoxScreen(IWebDriver driver)
+        private WindowsElement FileMenu => windowsDriver.FindElementByName("File");
+        private WindowsElement OpenMenuOption => windowsDriver.FindElementByName("Open");
+        private WindowsElement FormMenuOption => windowsDriver.FindElementByName("Form...");
+        private WindowsElement MenuForm => windowsDriver.FindElementByName("Menu.fdl");
+
+        public ParadoxScreen(WindowsDriver<WindowsElement> windowsDriver)
         {
-            this.driver = driver;
-            PageFactory.InitElements(this.driver, this);
+            this.windowsDriver = windowsDriver;
         }
-
-        // Locators - MENU
-        [FindsBy(How = How.Name, Using = "File")]
-        private IWebElement fileMenu;
-        // Locators - FILE/
-        [FindsBy(How = How.Name, Using = "Open")]
-        private IWebElement openMenu;
-        // Locators - File/Open/
-        [FindsBy(How = How.Name, Using = "Form...")]
-        private IWebElement formMenu;
-        // Locators - File/Open/OpenPopupWindow
-        [FindsBy(How = How.Name, Using = "Menu.fdl")]
-        private IWebElement formFileName;
-        [FindsBy(How = How.Name, Using = "Open")]
-        private IWebElement openButton;
 
         public void OpenMenuForm()
         {
-            fileMenu.Click();
-            openMenu.Click();
-            formMenu.Click();
-            formFileName.Click();
-            formFileName.SendKeys(Keys.Enter);
+            FileMenu.Click();
+            OpenMenuOption.Click();
+            FormMenuOption.Click();
+            MenuForm.Click();
+            MenuForm.SendKeys(Keys.Enter);
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using FreshTradeTests.Libraries.Screens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Appium.PageObjects;
-using OpenQA.Selenium.Support.PageObjects;
 using System;
 using TechTalk.SpecFlow;
 
@@ -12,33 +10,34 @@ namespace FreshTradeTests.Features.StepDefinition
     [Binding]
     public class FreshTradeCloseSteps
     {
-        private readonly IWebDriver driver;
+        private WindowsDriver<WindowsElement> windowsDriver;
+        
         private CompanySelectScreen companySelectionScreen;
         private MenuScreen menuScreen;
 
-        public FreshTradeCloseSteps(IWebDriver driver)
+        public FreshTradeCloseSteps(WindowsDriver<WindowsElement> windowsDriver)
         {
-            this.driver = driver;
+            this.windowsDriver = windowsDriver;
         }
 
         [Given(@"I select TPUKFRIDAY")]
         public void GivenISelectTPUKFRIDAY()
         {
-            companySelectionScreen = new CompanySelectScreen(this.driver);
+            companySelectionScreen = new CompanySelectScreen(this.windowsDriver);
             companySelectionScreen.SelectTPUKFRIDAY();
         }
 
         [Given(@"I select TPIEFRIDAY")]
         public void GivenISelectTPIEFRIDAY()
         {
-            companySelectionScreen = new CompanySelectScreen(this.driver);
+            companySelectionScreen = new CompanySelectScreen(this.windowsDriver);
             companySelectionScreen.SelectTPIEFRIDAY();
         }
 
         [When(@"I close FreshTrade from the menu")]
         public void WhenICloseFromTheMenu()
         {
-            menuScreen = new MenuScreen(this.driver);
+            menuScreen = new MenuScreen(this.windowsDriver);
             menuScreen.CloseFreshTrade();
         }
         
